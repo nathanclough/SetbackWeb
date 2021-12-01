@@ -5,9 +5,15 @@ app = socketio.ASGIApp(sio,static_files={
     '/':'./public/'
 })
 
+async def task(sid):
+    await sio.sleep(5)
+    result = await sio.call('mult',{'numbers': [3,4]},sid)
+    print(result)
+
 @sio.event
 async def connect(sid,environ):
     print(sid,'connected')
+    sio.start_background_task(task,sid)
 
 @sio.event
 async def disconnected(sid):
