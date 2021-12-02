@@ -1,1 +1,3 @@
 to run: uvicorn --reload app:app
+
+rooms for the lobbies 
