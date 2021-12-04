@@ -77,3 +77,9 @@ async def leave_team(sid,data):
     async with sio.session(sid) as session:
         session["team"] = ""
         await sio.emit('left_team',data,room=session['room'])
+
+@sio.event
+async def update_ready(sid,data):
+    async with sio.session(sid) as session:
+        session['ready'] = data['ready']
+        print(sid,"ready is", data['ready'])

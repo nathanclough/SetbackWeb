@@ -10,7 +10,9 @@ export class Lobby{
 
         })
     }
-
+    updateReady(value){
+        this.sio.emit('update_ready',{'ready':value})
+    }
     selectTeam(team){
         this.sio.emit('select_team',{'team':team})
         console.log("select_team event",team) 

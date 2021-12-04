@@ -8,6 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 function Lobby(props){
     const [teamOne,setTeamOne] = useState([])
     const [teamTwo,setTeamTwo] = useState([])
+    const [ready,setReady] = useState(false)
     const [currentTeam,setCurrentTeam] = useState("")
     const addPlayer = (data)=>{
         if ( data["team"] === 1){
@@ -70,12 +71,37 @@ function Lobby(props){
         lobby.onTeamSelection(addPlayer)
         lobby.onLeft(removePlayer)
     },[])
+    
+    const buttons = () =>{
+        if(!ready){
+            return (
+            <div>
+                <Button onClick={()=>selectTeam(1)} variant="outlined" >Join Team One</Button>
+                <Button onClick={() => selectTeam(2)} variant="outlined">Join Team Two</Button>
+            </div>)
+        }
+        else{
+            return <div></div>
+        }
+    }
+    const readyText = () =>{
+        if(ready){
+            return "Un-ready"
+        }
+        else{
+            return "Ready"
+        }
+    }
 
     return (
         <div>
             <h3>Lobby</h3>
-            <Button onClick={()=>selectTeam(1)} variant="outlined" >Join Team One</Button>
-            <Button onClick={() => selectTeam(2)} variant="outlined">Join Team Two</Button>
+            { buttons()}
+            <Button onClick={() => {
+                const r = (!ready && currentTeam !== "")
+                lobby.updateReady(r)
+                setReady(r)
+                }}>{readyText()}</Button>
             <div style={{display:'flex', justifyContent:'space-between' }}>
 
             <div style={{padding:'15px'}}>
