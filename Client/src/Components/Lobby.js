@@ -10,6 +10,7 @@ function Lobby(props){
     const [teamTwo,setTeamTwo] = useState([])
     const [ready,setReady] = useState(false)
     const [currentTeam,setCurrentTeam] = useState("")
+    const [totalReady,setTotalReady] = useState(0)
     const addPlayer = (data)=>{
         if ( data["team"] === 1){
             
@@ -70,6 +71,8 @@ function Lobby(props){
         home.onJoined((data) => console.log(data))
         lobby.onTeamSelection(addPlayer)
         lobby.onLeft(removePlayer)
+        lobby.onTotalReady(setTotalReady)
+        lobby.onStart(() => props.navigate("Table"))
     },[])
     
     const buttons = () =>{
@@ -98,25 +101,25 @@ function Lobby(props){
             <h3>Lobby</h3>
             { buttons()}
             <Button onClick={() => {
-                const r = (!ready && currentTeam !== "")
+                const r = (!ready && currentTeam !== "" && ( currentTeam == 1 ? (teamOne.length <=2) : (teamTwo.length <=2)))
                 lobby.updateReady(r)
                 setReady(r)
                 }}>{readyText()}</Button>
+            <p>{totalReady}</p>
             <div style={{display:'flex', justifyContent:'space-between' }}>
-
-            <div style={{padding:'15px'}}>
-                <p>Team One</p>
-                {teamOne.map((item, index) => (
-                    <li key={index}>{item}</li>
-                    ))}
-            </div>
-            
-            <div style={{padding:'15px'}}>
-                <p>Team Two</p>
-                {teamTwo.map((item, index) => (
-                    <li key={index}>{item}</li>
-                    ))}
-            </div>
+                <div style={{padding:'15px'}}>
+                    <p>Team One</p>
+                    {teamOne.map((item, index) => (
+                        <li key={index}>{item}</li>
+                        ))}
+                </div>
+                
+                <div style={{padding:'15px'}}>
+                    <p>Team Two</p>
+                    {teamTwo.map((item, index) => (
+                        <li key={index}>{item}</li>
+                        ))}
+                </div>
             </div>
         </div>
     )

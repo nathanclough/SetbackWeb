@@ -26,7 +26,9 @@ function App() {
         case "SelectGame":
           return <SelectGame username={username} navigate={setCurrentPage}></SelectGame>  
         case "Lobby":
-          return <Lobby username={username}></Lobby>
+          return <Lobby navigate={setCurrentPage} username={username}></Lobby>
+        case "Table":
+          return <p>Game Started</p>
         default:
           return <Login username={username} setUsername={setUsername} navigate={setCurrentPage}></Login>
       }

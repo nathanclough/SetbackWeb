@@ -1,18 +1,19 @@
-from gameManager import GameManager
+from lobbyManager import LobbyManager
 import socketio
 
 sio = socketio.AsyncServer(async_mode='asgi',cors_allowed_origins='*')
 app = socketio.ASGIApp(sio)
 
-gameManager = GameManager()
+lobbyManager = LobbyManager()
 total = 0
 # example of server calling client     
 # sio.start_background_task(task,sid)
  
-async def task(sid):
+async def startTask(game_id):
     await sio.sleep(5)
-    result = await sio.call('mult',{'numbers': [3,4]},sid)
-    print(result)
+    if lobbyManager.games[game_id].is_ready():
+        print("started", game_id)
+        await sio.emit('start_game',room=game_id)
 
 @sio.event
 async def connect(sid,environ):
@@ -32,7 +33,7 @@ async def disconnect(sid):
     await sio.emit('client_count',{'total_clients':total})
     session = await sio.get_session(sid)
     if "room" in session:
-        await gameManager.remove_from_game(session["room"],sid)
+        await lobbyManager.remove_from_game(session["room"],sid)
 
     print(session['username'],sid,'disconnected')
 
@@ -45,7 +46,7 @@ async def set_username(sid,data):
 @sio.event
 async def create_game(sid):
     # create a new room 
-    gameid = await gameManager.create_game(sid)
+    gameid = await lobbyManager.create_game(sid)
     print("created",gameid)
     sio.enter_room(sid,gameid)
     async with sio.session(sid) as session:
@@ -56,7 +57,7 @@ async def create_game(sid):
 
 @sio.event
 async def join_game(sid,data):
-    gameid = await gameManager.join_game(sid,data["game_id"])
+    gameid = await lobbyManager.join_game(sid,data["game_id"])
     # if game to join 
     if gameid:
         async with sio.session(sid) as session:
@@ -70,12 +71,14 @@ async def join_game(sid,data):
 async def select_team(sid,data):
     async with sio.session(sid) as session:
         session["team"] = data["team"]
+        lobbyManager.games[session['room']].join_team(data['team'],sid)
         await sio.emit('team_selection',{'username':session['username'], 'team':data['team']}, room=session['room'])
 
 @sio.event 
 async def leave_team(sid,data):
     async with sio.session(sid) as session:
         session["team"] = ""
+        lobbyManager.games[session['room']].leave_team(data['team'],sid)
         await sio.emit('left_team',data,room=session['room'])
 
 @sio.event
@@ -83,3 +86,9 @@ async def update_ready(sid,data):
     async with sio.session(sid) as session:
         session['ready'] = data['ready']
         print(sid,"ready is", data['ready'])
+        ready_count = await lobbyManager.update_ready(session['room'],data['ready'],session['team'],sid)
+        print(ready_count)
+        await sio.emit('total_ready',{'total':ready_count},room=session['room'])
+        if ready_count == 4:
+            print(ready_count)
+            sio.start_background_task(startTask,session['room'])

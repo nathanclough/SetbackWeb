@@ -13,7 +13,7 @@ function SelectGame(props){
     }
     
     const handleJoinGame = (result) =>{
-        if(result == gameId){
+        if(result === gameId){
             props.navigate("Lobby")
         }
         else{

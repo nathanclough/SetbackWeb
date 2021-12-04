@@ -11,6 +11,7 @@ export class Lobby{
         })
     }
     updateReady(value){
+        console.log(value)
         this.sio.emit('update_ready',{'ready':value})
     }
     selectTeam(team){
@@ -28,5 +29,18 @@ export class Lobby{
     leaveTeam(team,username){
         console.log('leave_team',team,username)
         this.sio.emit('leave_team', {'team':team, 'username':username})
+    }
+
+    onTotalReady(cb){
+        this.sio.on('total_ready', (data)=>{
+            console.log(data)
+            cb(data['total'])  
+        })
+    }
+
+    onStart(cb){
+        this.sio.on('start_game',(data)=>{
+            cb()
+        })
     }
 }
