@@ -1,8 +1,10 @@
 import openSocket from 'socket.io-client';
 import { Home } from './Home';
+import {Lobby } from './Lobby';
 
 const  sio = openSocket('http://localhost:8000');
 const home = new Home(sio);
+const lobby = new Lobby(sio);
 
 function onConnection(cb){
     sio.on('connect', () => {
@@ -29,4 +31,4 @@ sio.on('client_count',(data) => {
     console.log("total clients",data['total_clients'])
 })
 
-export {home}
+export {home, lobby}

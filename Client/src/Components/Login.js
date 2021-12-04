@@ -5,15 +5,17 @@ import { TextField } from '@mui/material';
 
 function Login(props) {
     const [connection, setConnection] = useState("Not Connected");
-    const [username,setUsername] = useState("guest");
     const [i, setInput] = useState("");
     home.onConnection(() => setConnection("Connected"))
   
    const onContinue  = () => 
    {
-     console.log(i)
-     home.setUsername(i,setUsername)
-     props.navigate("SelectGame")
+        if(i !== ""){
+        console.log("set user")
+        home.setUsername(i,props.setUsername)
+        }
+
+        props.navigate("SelectGame")
    }
 
    return (
