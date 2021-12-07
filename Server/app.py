@@ -51,6 +51,8 @@ async def create_game(sid):
     sio.enter_room(sid,gameid)
     async with sio.session(sid) as session:
         session["room"] = gameid
+        print(session["room"])
+        print(lobbyManager.games)
         await sio.emit('joined_game',{'username':session['username'] })
         print("Joined", gameid)
     return gameid
@@ -71,6 +73,8 @@ async def join_game(sid,data):
 async def select_team(sid,data):
     async with sio.session(sid) as session:
         session["team"] = data["team"]
+        print(lobbyManager.games)
+        print(session)
         lobbyManager.games[session['room']].join_team(data['team'],sid)
         await sio.emit('team_selection',{'username':session['username'], 'team':data['team']}, room=session['room'])
 
