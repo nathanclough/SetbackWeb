@@ -6,15 +6,15 @@ class LobbyManager():
     def __init__(self) -> None:
         self.games = {}
     
-    async def create_game(self,sid):
+    async def create_game(self,sid,username):
         game_id = f"Game-{len(self.games)+1}"
         self.games[game_id] = Lobby()
-        self.games[game_id].add_player(sid)
+        self.games[game_id].add_player(sid,username)
         return game_id
 
-    async def join_game(self,sid,game_id):
+    async def join_game(self,sid,game_id,username):
         if not self.games[game_id].is_full():
-            self.games[game_id].add_player(sid)
+            self.games[game_id].add_player(sid,username)
             return game_id
         else:
             return None

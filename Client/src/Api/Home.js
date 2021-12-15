@@ -1,4 +1,4 @@
-export class Home{
+export default class Home{
     constructor(sio){
         this.sio = sio;
     }

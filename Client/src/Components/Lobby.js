@@ -1,7 +1,6 @@
 import { Button } from "@mui/material";
 import { display } from "@mui/system";
 import { useState, useEffect } from "react";
-import { home, lobby } from "../Api/Api";
 import { v4 as uuidv4 } from 'uuid';
 
 
@@ -12,6 +11,7 @@ function Lobby(props){
     const [currentTeam,setCurrentTeam] = useState("")
     const [totalReady,setTotalReady] = useState(0)
     const addPlayer = (data)=>{
+        console.log("added player")
         if ( data["team"] === 1){
             
             setTeamOne(prevTeamOne => {
@@ -54,25 +54,28 @@ function Lobby(props){
         
         if( currentTeam === ""){
             console.log("here")
-            lobby.selectTeam(team)
+            props.lobbyApi.selectTeam(team)
             setCurrentTeam(team)
         }
         else if (currentTeam !== team){
             console.log(props.username)
-            lobby.leaveTeam(currentTeam,props.username);
-            lobby.selectTeam(team)
+            props.lobbyApi.leaveTeam(currentTeam,props.username);
+            props.lobbyApi.selectTeam(team)
             setCurrentTeam(team)
 
         }
     }
 
+    const setInitialTeams = (teamOne,teamTwo) =>{
+        setTeamOne(teamOne)
+        setTeamTwo(teamTwo)
+    }
     useEffect( () => {
-        console.log(props.username)
-        home.onJoined((data) => console.log(data))
-        lobby.onTeamSelection(addPlayer)
-        lobby.onLeft(removePlayer)
-        lobby.onTotalReady(setTotalReady)
-        lobby.onStart(() => props.navigate("Table"))
+        props.lobbyApi.getTeams(setInitialTeams)
+        props.lobbyApi.onTeamSelection(addPlayer)
+        props.lobbyApi.onLeft(removePlayer)
+        props.lobbyApi.onTotalReady(setTotalReady)
+        props.lobbyApi.onStart(() => props.navigate("Table"))
     },[])
     
     const buttons = () =>{
@@ -102,8 +105,10 @@ function Lobby(props){
             { buttons()}
             <Button onClick={() => {
                 const r = (!ready && currentTeam !== "" && ( currentTeam == 1 ? (teamOne.length <=2) : (teamTwo.length <=2)))
-                lobby.updateReady(r)
-                setReady(r)
+                if( r !== ready){
+                    props.lobbyApi.updateReady(r)
+                    setReady(r)
+                }
                 }}>{readyText()}</Button>
             <p>{totalReady}</p>
             <div style={{display:'flex', justifyContent:'space-between' }}>

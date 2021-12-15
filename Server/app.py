@@ -32,8 +32,12 @@ async def disconnect(sid):
     total -= 1
     await sio.emit('client_count',{'total_clients':total})
     session = await sio.get_session(sid)
+    
     if "room" in session:
         await lobbyManager.remove_from_game(session["room"],sid)
+    
+    if "team" in session:
+        await sio.emit('left_team', {'team':session["room"], 'username':session["username"]},room=session['room'])
 
     print(session['username'],sid,'disconnected')
 
@@ -46,10 +50,10 @@ async def set_username(sid,data):
 @sio.event
 async def create_game(sid):
     # create a new room 
-    gameid = await lobbyManager.create_game(sid)
-    print("created",gameid)
-    sio.enter_room(sid,gameid)
     async with sio.session(sid) as session:
+        gameid = await lobbyManager.create_game(sid,session['username'])
+        print("created",gameid)
+        sio.enter_room(sid,gameid)
         session["room"] = gameid
         print(session["room"])
         print(lobbyManager.games)
@@ -59,15 +63,15 @@ async def create_game(sid):
 
 @sio.event
 async def join_game(sid,data):
-    gameid = await lobbyManager.join_game(sid,data["game_id"])
+    async with sio.session(sid) as session:
+        gameid = await lobbyManager.join_game(sid,data["game_id"],session['username'])
     # if game to join 
-    if gameid:
-        async with sio.session(sid) as session:
+        if gameid:
             print("joined")
             sio.enter_room(sid,gameid)
             session["room"] = gameid
             await sio.emit('joined_game',{'username':session['username'] },room=gameid,skip_sid=sid)
-    return gameid
+        return gameid
 
 @sio.event
 async def select_team(sid,data):
@@ -96,3 +100,12 @@ async def update_ready(sid,data):
         if ready_count == 4:
             print(ready_count)
             sio.start_background_task(startTask,session['room'])
+
+@sio.event
+async def get_teams(sid):
+    async with sio.session(sid) as session:
+        game = lobbyManager.games[session['room']]
+        result = {}
+        result[1] = game.get_players(1)
+        result[2] = game.get_players(2)
+        return result

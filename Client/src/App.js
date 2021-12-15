@@ -3,9 +3,15 @@ import React, { useState, useEffect } from 'react';
 import Login from './Components/Login';
 import SelectGame from './Components/SelectGame';
 import Lobby from './Components/Lobby';
-import { home } from './Api/Api';
+import Home from './Api/Home'
+import LobbyApi from './Api/Lobby'
 import './App.css';
 import { createTheme,ThemeProvider } from '@mui/material/styles';
+import openSocket from 'socket.io-client';
+
+const  sio = openSocket('http://localhost:8000');
+const home = new Home(sio);
+const lobby = new LobbyApi(sio); 
 
 function App() {
   const darkTheme = createTheme({
@@ -24,13 +30,13 @@ function App() {
     const getComponent = () => {
       switch (currentPage) {
         case "SelectGame":
-          return <SelectGame username={username} navigate={setCurrentPage}></SelectGame>  
+          return <SelectGame homeApi={home} username={username} navigate={setCurrentPage}></SelectGame>  
         case "Lobby":
-          return <Lobby navigate={setCurrentPage} username={username}></Lobby>
+          return <Lobby lobbyApi={lobby} homeApi={home} navigate={setCurrentPage} username={username}></Lobby>
         case "Table":
           return <p>Game Started</p>
         default:
-          return <Login username={username} setUsername={setUsername} navigate={setCurrentPage}></Login>
+          return <Login homeApi={home} username={username} setUsername={setUsername} navigate={setCurrentPage}></Login>
       }
   }
   

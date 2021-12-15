@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react'
-import {home } from '../Api/Api'
 import Button from '@mui/material/Button'
 import { Alert, TextField } from '@mui/material'
 
@@ -8,7 +7,7 @@ function SelectGame(props){
     const [gameId,setGameId] = useState("")
 
     const createGameClick = () =>{
-        home.createGame();
+        props.homeApi.createGame();
         props.navigate("Lobby")
     }
     
@@ -22,7 +21,7 @@ function SelectGame(props){
     }
 
     const joinGameClick = () =>{
-        home.JoinGame(gameId,handleJoinGame)
+        props.homeApi.JoinGame(gameId,handleJoinGame)
     }
 
 

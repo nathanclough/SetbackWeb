@@ -1,4 +1,4 @@
-export class Lobby{
+export default class LobbyApi{
     constructor(sio){
         this.sio = sio;
     }
@@ -41,6 +41,12 @@ export class Lobby{
     onStart(cb){
         this.sio.on('start_game',(data)=>{
             cb()
+        })
+    }
+
+    getTeams(cb){
+        this.sio.emit('get_teams', (result) =>{
+            cb(result[1],result[2])
         })
     }
 }

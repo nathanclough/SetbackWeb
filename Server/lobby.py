@@ -1,9 +1,10 @@
 import uuid
 
 class Member:
-    def __init__(self,sid) -> None:
+    def __init__(self,sid,username) -> None:
         self.sid = sid
         self.ready = False
+        self.username = username
 
 class Lobby:
     def __init__(self) -> None:
@@ -16,8 +17,8 @@ class Lobby:
     def is_full(self):
         return len(self.connected) >= 4
 
-    def add_player(self,sid):
-        self.connected[sid] = Member(sid)
+    def add_player(self,sid,username):
+        self.connected[sid] = Member(sid,username)
 
     def remove_player(self,sid):
         self.connected.pop(sid)
@@ -65,3 +66,9 @@ class Lobby:
         else:
             self.team_two = [m for m in self.team_two if m.sid != sid]
         print("Count",len(self.team_one),len(self.team_two))
+
+    def get_players(self,team):
+        if team == 1:
+            return [m.username for m in self.team_one]
+        else:
+            return [m.username for m in self.team_two]
