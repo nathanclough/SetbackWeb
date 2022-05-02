@@ -8,7 +8,7 @@ function Login(props) {
     
     useEffect( () => {
         props.homeApi.onConnection(() => setConnection("Connected"))
-    }, [])
+    }, [props.homeApi])
   
    const onContinue  = () => 
    {

@@ -17,6 +17,9 @@ class Lobby:
     def is_full(self):
         return len(self.connected) >= 4
 
+    def is_empty(self):
+        return len(self.connected) == 0
+        
     def add_player(self,sid,username):
         self.connected[sid] = Member(sid,username)
 

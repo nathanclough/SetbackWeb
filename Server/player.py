@@ -1,17 +1,15 @@
-from setback.game.card import Card
+from card import Card
 import uuid
+from lobby import Member
 
 class Player():
-    def __init__(self,name,team,id = None) -> None:
-        self.name = name
+    def __init__(self,team,member:Member) -> None:
+        self.name = member.username
         self.team = team
         self.cards = []
         self.current_bid = -1
         self.position = 0
-        if(id == None):
-            self.id = str(uuid.uuid4())
-        else:
-            self.id = id
+        self.id = member.sid        
     
     def give_cards(self,cards):
         if(len(self.cards) + len(cards) > 6):
@@ -24,5 +22,8 @@ class Player():
         else:
             return 1
     
-
+    def get_card_list(self):
+        for card in self.cards:
+            print(card.rank,card.suit)
+        return [{"suit":c.suit.value if c.suit else "","rank":str(c.rank)} for c in self.cards]
     
