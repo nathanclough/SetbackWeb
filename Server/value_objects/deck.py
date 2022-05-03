@@ -1,6 +1,6 @@
-from common.suit import suits
-from common.rank import Rank, normal_ranks
-from card import Card
+from value_objects.suit import suits
+from value_objects.rank import Rank, normal_ranks
+from value_objects.card import Card
 import itertools
 import random
 

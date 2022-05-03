@@ -1,4 +1,4 @@
-from lobbyManager import LobbyManager
+from aggregates.lobbyManager import LobbyManager
 import socketio
 
 sio = socketio.AsyncServer(async_mode='asgi',cors_allowed_origins='*')

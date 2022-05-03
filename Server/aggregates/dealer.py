@@ -1,7 +1,7 @@
-from deck import Deck
-from player import Player
-from card import Card
-from list_helper import ListHelper
+from value_objects.deck import Deck
+from entities.player import Player
+from value_objects.card import Card
+from common.list_helper import ListHelper
 import random
 
 class Dealer():

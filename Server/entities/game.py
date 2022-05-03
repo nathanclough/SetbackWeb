@@ -1,5 +1,5 @@
-from dealer import Dealer
-from player import Player
+from aggregates.dealer import Dealer
+from entities.player import Player
 import random
 
 class Game:

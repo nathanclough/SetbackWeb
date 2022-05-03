@@ -1,5 +1,5 @@
 from app import sio
-from lobbyManager import LobbyManager
+from aggregates.lobbyManager import LobbyManager
 from services.GameService import CreateGame
 
 lobbyManager = LobbyManager()

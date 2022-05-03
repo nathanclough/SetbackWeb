@@ -1,6 +1,6 @@
-from card import Card
+from value_objects.card import Card
 import uuid
-from lobby import Member
+from entities.lobby import Member
 
 class Player():
     def __init__(self,team,member:Member) -> None:

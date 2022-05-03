@@ -1,6 +1,6 @@
 import socketio
 import asyncio
-from lobby import Lobby
+from entities.lobby import Lobby
 
 class LobbyManager():
     def __init__(self) -> None:

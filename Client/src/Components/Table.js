@@ -45,7 +45,7 @@ function Table (props) {
     return (
         <div style={{display:"flex", flexDirection:"column", alignItems:"center",justifyContent:"space-between"}}>
             <Button variant="outlined" onClick={handleClickOpen}>
-                 Open form dialog
+                 Select Bid
              </Button>
             <div style={{display: "flex", flexDirection: "row", justifyContent:"space-between", height:"85vh"}}>
                 <div style={{width:"80vw"}}>

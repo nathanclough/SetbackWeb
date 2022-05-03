@@ -1,5 +1,5 @@
 from app import sio
-from game import Game
+from entities.game import Game
 
 Games = {}
 async def CreateGame(game_id,t1,t2):

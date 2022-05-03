@@ -1,5 +1,5 @@
-from common.rank import Rank
-from common.suit import Suit
+from value_objects.rank import Rank
+from value_objects.suit import Suit
 
 class Card():
     def __init__(self,rank: int, suit: Suit) -> None:

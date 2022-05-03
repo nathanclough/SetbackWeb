@@ -47,10 +47,10 @@ function App() {
     <div className="App">
       <header className="App-header">
         <ThemeProvider theme={darkTheme}>
-          <Table gameApi={game}></Table>
-          {/* {
+          
+          {
             getComponent()
-          } */}
+          }
         </ThemeProvider>        
       </header>
     </div>

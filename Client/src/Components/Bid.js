@@ -4,11 +4,15 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import {Button, Slider} from "@mui/material";
+import { useState } from 'react';
 
 function Bid(props){
+    const [amt,setAmt] = useState(0)
     const handleClose = (event,reason) => {
         if (reason !== 'backdropClick') {
           props.setOpen(false);
+          console.log(amt)
+          
         }
       };
 
@@ -21,11 +25,12 @@ function Bid(props){
             </DialogContentText>
                 <Slider
                 aria-label="Bid"
-                defaultValue={10}
+                defaultValue={0}
                 valueLabelDisplay="on"
                 step={1}
                 min={0}
                 max={7}
+                onChange={(e) => {setAmt(e.target.value)}}
                 />
             </DialogContent>
             <DialogActions>
