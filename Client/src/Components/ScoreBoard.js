@@ -20,7 +20,7 @@ function ScoreBoard (props) {
             <p style={pStyle}>Team One: {props.score[1]} </p><p style={pStyle}>Team Two: {props.score[2]}</p>
             {props.players.map((item,index) => (
                 <ListItem key={index} style={getStyle(index)}>
-                    <ListItemText primary={item} secondary={`team ${index%2+1}`}></ListItemText>
+                    <ListItemText primary={item.name} secondary={`team ${item.team}, bid ${item.current_bid}`}></ListItemText>
                 </ListItem>
             ))}
         </List>)

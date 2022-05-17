@@ -1,7 +1,7 @@
 import { ListItem,List,ListItemText,Button,Slider} from "@mui/material";
 import { useEffect,useState } from "react";
 import ScoreBoard from "./ScoreBoard"
-import Bid from "./Bid"
+import Bid from "./Bid";
 
 
 function Table (props) {
@@ -23,7 +23,21 @@ function Table (props) {
             setPlayers(data['players'])
             setDealer(data['dealer'])
             setCards(data['cards'])
+            setActiveTurn(data['players'].findIndex( (x) => x.name === data.current_bidder))
+            setOpen(data.current_bidder === data.name)
+            props.gameApi.onBid((bidRes) => {
+                let newPlayers = [...data.players]
+                var index = newPlayers.findIndex( x => x.name === bidRes.name) 
+                newPlayers[index].current_bid = bidRes.bid 
+                console.log(bidRes.nextBidder)           
+                setActiveTurn(data['players'].findIndex( (x) => x.name === bidRes.nextBidder))
+                setOpen(bidRes.nextBidder === data.name)
+                setPlayers(newPlayers)
+             })
          } )
+
+         
+
     },[props.gameApi])
     
     const selectCard = (card) => {
@@ -44,9 +58,6 @@ function Table (props) {
 
     return (
         <div style={{display:"flex", flexDirection:"column", alignItems:"center",justifyContent:"space-between"}}>
-            <Button variant="outlined" onClick={handleClickOpen}>
-                 Select Bid
-             </Button>
             <div style={{display: "flex", flexDirection: "row", justifyContent:"space-between", height:"85vh"}}>
                 <div style={{width:"80vw"}}>
                     <List style={{display:"flex", flexDirection:"row"}} >
@@ -57,7 +68,7 @@ function Table (props) {
                     ))}
                     </List>
                 </div>
-                <ScoreBoard score={score} activeTurn={1} players={players}/>
+                <ScoreBoard score={score} activeTurn={activeTurn} players={players}/>
             </div>
             <div style={{height:"10vh", width:"95vw"}}>
                 <List  style={{display:"flex", flexDirection:"row", alignItems:"flex-start", justifyContent:"flex-start"}} >
@@ -71,7 +82,7 @@ function Table (props) {
                     <Button variant="contained" style={{marginLeft:"auto", minWidth:"80px"}}>Confirm</Button>
                 </List>                
             </div>
-            <Bid open={open} setOpen={setOpen}></Bid>
+            <Bid gameApi={props.gameApi} open={open} setOpen={setOpen}></Bid>
         </div>
     )
 }

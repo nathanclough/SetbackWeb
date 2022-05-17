@@ -10,9 +10,10 @@ function Bid(props){
     const [amt,setAmt] = useState(0)
     const handleClose = (event,reason) => {
         if (reason !== 'backdropClick') {
-          props.setOpen(false);
           console.log(amt)
-          
+          props.gameApi.makeBid( (res) => { console.log(res)},amt)  
+          props.setOpen(false);
+
         }
       };
 

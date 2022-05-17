@@ -38,10 +38,32 @@ export default class GameApi{
         //         "guest-7CxJ",
         //         "guest-OsdL",
         //         "guest-mBvY"
-        //     ]
+        //     ],
+        //      "current_bidder":"guest-mBvY",
+        //      "name": "guest-mBvY"
         // })
+        
         this.sio.emit('get_initial_state',(result) => {
+            console.log(result)
             cb(result)
+        }) 
+    }
+
+    makeBid(cb,bid){
+        this.sio.emit('make_bid', {'bid':bid}, (result) => {
+            console.log("made bid",bid)
+            cb(result)
+        })
+    }
+
+    onBidRequest(cb){
+        this.sio.on('bid_request',)
+    }
+
+    onBid(cb){
+        this.sio.on('bid_made', (data) => {
+            console.log("hello")
+            cb(data)
         })
     }
 }
