@@ -10,7 +10,13 @@ class BidManager():
         self.bidder_index = ListHelper.get_next_index(self.bidder_index)
     
     def get_winner(self):
-        max(self.bids, key=self.bids.get)
+        winner = max(self.bids, key=self.bids.get)
+        bid = self.bids[winner]
+        return bid,winner
     
     def get_bids(self):
         return self.bids
+
+    def bids_are_complete(self):
+        print(self.bids)
+        return len(self.bids) == 4

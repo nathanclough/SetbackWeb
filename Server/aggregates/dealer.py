@@ -14,7 +14,7 @@ class Dealer():
     def deal(self,players: list[Player]):
         # Deal cards  
         for x in range(6):
-            self.kitty.append(self.deck.draw_cards(1))
+            self.kitty += self.deck.draw_cards(1)
             for p in players:
                 p.give_cards(self.deck.draw_cards(1))
 

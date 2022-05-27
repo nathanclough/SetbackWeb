@@ -47,10 +47,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         <ThemeProvider theme={darkTheme}>
-          
-          {
-            getComponent()
-          }
+          {getComponent()}  
         </ThemeProvider>        
       </header>
     </div>

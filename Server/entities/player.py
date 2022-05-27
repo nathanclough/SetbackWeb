@@ -12,8 +12,6 @@ class Player():
         self.id = member.sid        
     
     def give_cards(self,cards):
-        if(len(self.cards) + len(cards) > 6):
-            raise Exception("Player can only have 6 cards")
         self.cards.extend(cards)
     
     def get_opposing_team_number(self):
@@ -26,4 +24,11 @@ class Player():
         for card in self.cards:
             print(card.rank,card.suit)
         return [{"suit":c.suit.value if c.suit else "","rank":str(c.rank)} for c in self.cards]
-    
+
+    def discard_cards(self, discards):
+        print("discards",discards)
+        print("before",self.cards)
+        self.cards = [c for c in self.cards if c not in discards]    
+        print("after",self.cards)
+
+            

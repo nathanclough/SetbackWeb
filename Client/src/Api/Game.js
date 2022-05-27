@@ -32,15 +32,18 @@ export default class GameApi{
         //         }
         //     ],
         //     "team": 1,
-        //     "dealer": "guest-_H17",
+        //     "dealer": "n",
         //     "players": [
-        //         "guest-_H17",
-        //         "guest-7CxJ",
-        //         "guest-OsdL",
-        //         "guest-mBvY"
+        //         { "name": "n", "team" : 1, "current_bid" : "p.current_bid", "position" : "p.position"},
+        //         { "name": "n2", "team" : 1, "current_bid" : "p.current_bid", "position" : "p.position"},
+        //         ,
+        //         { "name": "n3", "team" : 2, "current_bid" : "p.current_bid", "position" : "p.position"},
+        //         ,
+        //         { "name": "n4", "team" : 2, "current_bid" : "p.current_bid", "position" : "p.position"},
+
         //     ],
-        //      "current_bidder":"guest-mBvY",
-        //      "name": "guest-mBvY"
+        //      "current_bidder":"n",
+        //      "name": "n2"
         // })
         
         this.sio.emit('get_initial_state',(result) => {
@@ -65,5 +68,27 @@ export default class GameApi{
             console.log("hello")
             cb(data)
         })
+    }
+
+    onBidWin(cb){
+        this.sio.on('bid_won', (data) => {
+            console.log(data)
+            cb(data)
+        })
+    }
+
+    setTrump(data) {
+        console.log(data)
+        this.sio.emit('set_trump',data)
+    }
+
+    onNewTrump(cb,bid){
+        this.sio.on('new_trump', (data) => {
+            cb(data["trump"])
+        })
+    }
+
+    discard(data){
+        this.sio.emit('discard',{"discard" : data})
     }
 }

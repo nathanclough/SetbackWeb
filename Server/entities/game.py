@@ -19,8 +19,9 @@ class Game:
 
         # deal cards 
         self.dealer.deal(self.players)
-
+        self.trump = None
         self.score = [0,0]
+        self.state = "bid"
     
     def get_dealer(self):
         return self.players[self.dealer.dealer_index].name
@@ -37,15 +38,25 @@ class Game:
     
     def get_bids(self):
         return self.bid_manager.get_bids()
+    
+    def bids_are_complete(self):
+        return self.bid_manager.bids_are_complete()
+
+    def get_bid_winner(self):
+        bid,winner = self.bid_manager.get_winner()
+        return bid, winner, self.dealer.kitty
 
     def discard_cards(self,pid,cards_to_remove):
         # remove the cards for given player 
         return None
 
-    def set_trump(self,pid,trump):
+    def set_trump(self,pid,trump,discards):
         # check if pid won the bid 
-        # then set trump 
-        return None
+        bid, winner = self.bid_manager.get_winner()
+        player = self.get_player(pid)
+        if( winner == pid ):
+            self.trump = Suit.from_string(trump)
+            player.cards = [ c for c in player.cards if c not in discards]
 
     def get_score(self):
         return self.score

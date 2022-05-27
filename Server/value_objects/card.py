@@ -10,3 +10,11 @@ class Card():
     def get_rank(self) -> Rank:
         return self.rank 
         
+    def to_json(self):
+        return {"suit":self.suit.value if self.suit else "","rank":str(self.rank)}
+
+    def from_json(data):
+        return Card(data["rank"], data["suit"])
+
+    def __eq__(self,other):
+        return self.rank == other.rank and self.suit == other.suit
